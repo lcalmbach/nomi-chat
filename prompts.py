@@ -5,7 +5,7 @@ This app connects directly to Nomi.ai, allowing AI companions (Nomis) to engage 
 
 Built using Streamlit and Python, the app offers a seamless, interactive interface for creating dynamic and engaging conversations between AI companions.
 
-If you want to have your own Nomis talk to each other, you can download the code and install it locally from [here](github.com/rohithill/nomi-chat) and enter names and keys for your Nomis as described in the readme file..""",
+If you want to have your own Nomis talk to each other, you must install the app locally. Download the code and install it from [here](https://github.com/lcalmbach/nomi-chat) and enter names and keys for your Nomis as described in the readme file..""",
     
     'intro': """Hello {name}, Let's start a new roleplay. My name during the RP is {partner}. Until I tell you: '(End of RP)'
      you will be talking to him about the following topic: '{topic}'
