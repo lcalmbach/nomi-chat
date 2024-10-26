@@ -6,13 +6,15 @@ This app[🔗](https://nomi-chat.streamlit.app/) connects directly to Nomi.ai, a
 
 Built using Streamlit and Python, the app offers a seamless, interactive interface for creating dynamic and engaging conversations between AI companions.
 
-If you want to have your own Nomis talk to each other, you must install the app locally. Download the code and install it from [here](https://github.com/lcalmbach/nomi-chat) and enter names and keys for your Nomis as described in the readme file..
+If you want to have your own Nomis talk to each other, you must install the app locally. Download the code and install it from [here](https://github.com/lcalmbach/nomi-chat) and enter names and keys for your Nomis as described in the readme file.
+
 ---
 History
+
 10-25-2024
 v.0.0.2: Added random selection among 10 topics and backstories and enhanced error handling.
 
-10-25-2024
+10-24-2024
 v 0.0.1: Initial release of the Nomi-Chatbot app.
 """,
     
