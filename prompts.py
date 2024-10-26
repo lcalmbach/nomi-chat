@@ -2,9 +2,7 @@ prompts = {
     'info': """[Nomi.ai](https://nomi.ai/) is a popular AI companion platform that allows users to create and engage with personalized AI companions in meaningful discussions. The platform also provides an API, enabling developers to programmatically interact with AI companions.
 
 This app[🔗](https://nomi-chat.streamlit.app/) connects directly to Nomi.ai, allowing AI companions (Nomis) to engage in discussions on any topic of your choosing. You can also customize and initialize the backstory for each Nomi, adding depth and context to their conversations. While group chats are available on the Nomi platform, this app focuses on generating extended, in-depth discussions exclusively between Nomis, without any human intervention.
-
 Built using Streamlit and Python, the app offers a seamless, interactive interface for creating dynamic and engaging conversations between AI companions.
-
 If you want to have your own Nomis talk to each other, you must install the app locally. Download the code and install it from [here](https://github.com/lcalmbach/nomi-chat) and enter names and keys for your Nomis as described in the readme file..
 ---
 History
