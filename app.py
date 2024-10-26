@@ -4,13 +4,14 @@ import urllib.request
 import json
 from urllib.error import HTTPError
 import time
-from prompts import prompts
 import random
 import string
 from pathlib import Path
 
+from prompts import prompts
+
 __author__ = "lcalmbach@gmail.com"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 nomi_dict = {
     'patrick': {'key': st.secrets['bot1_key'], 'name': 'Patrick', 'icon': '👨‍🏭'},
@@ -29,30 +30,32 @@ st.set_page_config(
 )
 
 def get_response(nomi: dict, prompt: str):
-    print(len(prompt))
-    req = urllib.request.Request(
-        url=f"https://api.nomi.ai/v1/nomis/{nomi['key']}/chat",
-        method="POST",
-        data=json.dumps({"messageText": prompt}).encode("utf-8"),
-        headers={
-            "Authorization": authorisation_key,
-            "Content-Type": "application/json",
-        },
-    )
-
-    print(len(prompt))
-    try:
-        with urllib.request.urlopen(req) as response:
-            response_data = json.loads(response.read().decode())
-            return response_data['replyMessage']['text']
-    except HTTPError as e:
-        error_data = json.loads(e.read().decode())
-        print(error_data)
-    
-    except Exception as e:
-        print(f"Error: {e}")
-        print(len(prompt))
-        return "Sorry, I am not sure I can follow you here."
+    error_response = "Sorry, I am not sure I can follow you here."
+    if prompt is not None:
+        req = urllib.request.Request(
+            url=f"https://api.nomi.ai/v1/nomis/{nomi['key']}/chat",
+            method="POST",
+            data=json.dumps({"messageText": prompt}).encode("utf-8"),
+            headers={
+                "Authorization": authorisation_key,
+                "Content-Type": "application/json",
+            },
+        )
+        try:
+            with urllib.request.urlopen(req) as response:
+                response_data = json.loads(response.read().decode())
+                if 'error' in response_data:
+                    print(len(prompt), response_data['error'])
+                    return error_response
+                else:
+                    return response_data['replyMessage']['text']
+        except HTTPError as e:
+            return error_response
+        except Exception as e:
+            print(f"Error: {e}")
+            return error_response
+    else:
+        return error_response
 
 def create_file():
     random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
@@ -82,28 +85,28 @@ def main():
     with cols[1]:
         st.image("./assets/robo_chat.webp", width=800)
     st.markdown('---')
-    
-    topic = st.text_area("****Enter the context of the discussion here:****", value = prompts['topic'])
+    default_topic = random.choice(prompts['topics'])
+    topic = st.text_area("****Enter the context of the discussion here:****", value = default_topic['topic'])
     num_exchanges = st.number_input("Enter the number of exchanges you want to have:", min_value=1, max_value=MAX_NO, value=10, help="the more exchanges, the slower the answer will be")
     cols = st.columns(2)
     nomi1 = nomi_dict['patrick']
     nomi2 = nomi_dict['michael']
     with cols[0]:
         nomi1_key = st.selectbox(
-            f"**Select the first Nomi {nomi1['icon']}:**", 
+            f"**Select the first Bot {nomi1['icon']}:**", 
             options=list(nomi_name_dict.keys()),
             format_func=lambda x: nomi_name_dict[x],
         )
-        nomi1_backstory = st.text_area(f"**Enter the backstory for {nomi_name_dict[nomi1_key]} here:**", value = prompts['nomi1_backstory'])
+        nomi1_backstory = st.text_area(f"**Enter the backstory for {nomi_name_dict[nomi1_key]} here:**", value = default_topic['nomi1_backstory'])
     
     with cols[1]:
         nomi2_name_dict = {k: v for k, v in nomi_name_dict.items() if k != nomi1_key}
         nomi2_key = st.selectbox(
-            f"**Select the second Nomi {nomi2['icon']}:**", 
+            f"**Select the second Bot {nomi2['icon']}:**", 
             options=list(nomi2_name_dict.keys()),
             format_func=lambda x: nomi_name_dict[x]
         )
-        nomi2_backstory = st.text_area(f"**Enter the backstory for {nomi_name_dict[nomi2_key]} here:**", value = prompts['nomi2_backstory'])
+        nomi2_backstory = st.text_area(f"**Enter the backstory for {nomi_name_dict[nomi2_key]} here:**", value = default_topic['nomi2_backstory'])
     
     nomi1 = nomi_dict[nomi1_key]
     nomi2 = nomi_dict[nomi2_key]
@@ -115,7 +118,6 @@ def main():
         st.session_state['state'] = 'running'
         
         with st.spinner("Starting Chat..."):
-            
             # make introduction, this is not shown to the user
             nomi1_response = prompts['intro'].format(name=nomi1['name'], partner=nomi2['name'], topic=topic, backstory=nomi1_backstory)
             # nomi1 responds to my introduction
@@ -157,7 +159,7 @@ def main():
             file_name=str(st.session_state['file']),
             mime="text/plain"
         )
-    st.expander("ℹ️ About", expanded=False).markdown(prompts['info'])
+    st.expander(f"ℹ️ About v{__version__}", expanded=False).markdown(prompts['info'])
 
 if __name__ == "__main__":
     main()
