@@ -11,16 +11,14 @@ If you want to have your own Nomis talk to each other, you must install the app 
 ---
 History
 
-10-25-2024
-v.0.0.2: Added random selection among 10 topics and backstories and enhanced error handling.
-
-10-24-2024
-v 0.0.1: Initial release of the Nomi-Chatbot app.
+10-25-2024  v.0.0.1: initial
+10-25-2024  v.0.0.2: Added random selection among 10 topics and backstories and enhanced error handling.
+10-24-2024  v 0.0.2: Fixed error when entereing user defined topic.
 """,
     
     'intro': """Hello {name}, Let's start a new roleplay. My name during the RP is {partner}. Until I tell you: '(End of RP)'
      you will be talking to him about the following topic: '{topic}'
-     {backstory}
+     {backstory}Added random selection among 10 topics and backstories and enhanced error handling.
      We start the RP now.
 """,
     "topics": [

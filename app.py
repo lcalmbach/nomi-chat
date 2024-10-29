@@ -11,7 +11,7 @@ from pathlib import Path
 from prompts import prompts
 
 __author__ = "lcalmbach@gmail.com"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 nomi_dict = {
     'patrick': {'key': st.secrets['bot1_key'], 'name': 'Patrick', 'icon': '👨‍🏭'},
