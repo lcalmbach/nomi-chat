@@ -85,19 +85,36 @@ def main():
     with cols[1]:
         st.image("./assets/robo_chat.webp", width=800)
     st.markdown('---')
-    default_topic = random.choice(prompts['topics'])
-    topic = st.text_area("****Enter the context of the discussion here:****", value = default_topic['topic'])
-    num_exchanges = st.number_input("Enter the number of exchanges you want to have:", min_value=1, max_value=MAX_NO, value=10, help="the more exchanges, the slower the answer will be")
+    if 'topic' not in st.session_state:
+        st.session_state['topic'] = random.choice(prompts['topics'])
+        st.session_state['nomi1_key'] = 'patrick'
+        st.session_state['nomi2_key'] = 'michael'
+
+    topic = st.text_area(
+        "****Enter the context of the discussion here:****", 
+        value=st.session_state['topic']['topic']
+    )
+    num_exchanges = st.number_input(
+        "Enter the number of exchanges you want to have:", 
+        min_value=1, 
+        max_value=MAX_NO, 
+        value=10, 
+        help="the more exchanges, the slower the answer will be"
+    )
+
     cols = st.columns(2)
-    nomi1 = nomi_dict['patrick']
-    nomi2 = nomi_dict['michael']
+    nomi1 = nomi_dict[st.session_state['nomi1_key']]
+    nomi2 = nomi_dict[st.session_state['nomi2_key']]
     with cols[0]:
         nomi1_key = st.selectbox(
             f"**Select the first Bot {nomi1['icon']}:**", 
             options=list(nomi_name_dict.keys()),
             format_func=lambda x: nomi_name_dict[x],
         )
-        nomi1_backstory = st.text_area(f"**Enter the backstory for {nomi_name_dict[nomi1_key]} here:**", value = default_topic['nomi1_backstory'])
+        nomi1_backstory = st.text_area(
+            f"**Enter the backstory for {nomi_name_dict[nomi1_key]} here:**", 
+            value = st.session_state['topic']['nomi1_backstory']
+        )
     
     with cols[1]:
         nomi2_name_dict = {k: v for k, v in nomi_name_dict.items() if k != nomi1_key}
@@ -106,7 +123,10 @@ def main():
             options=list(nomi2_name_dict.keys()),
             format_func=lambda x: nomi_name_dict[x]
         )
-        nomi2_backstory = st.text_area(f"**Enter the backstory for {nomi_name_dict[nomi2_key]} here:**", value = default_topic['nomi2_backstory'])
+        nomi2_backstory = st.text_area(
+            f"**Enter the backstory for {nomi_name_dict[nomi2_key]} here:**", 
+            value=st.session_state['topic']['nomi2_backstory']
+        )
     
     nomi1 = nomi_dict[nomi1_key]
     nomi2 = nomi_dict[nomi2_key]
